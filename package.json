@@ -1,0 +1,13 @@
+{
+  "name": "sndbx",
+  "private": true,
+  "scripts": {
+    "commitmsg": "commitlint -E GIT_PARAMS"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@commitlint/cli": "^7.1.2",
+    "@commitlint/config-conventional": "^7.1.2",
+    "husky": "^0.14.3"
+  }
+}
