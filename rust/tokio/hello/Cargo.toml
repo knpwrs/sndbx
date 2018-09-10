@@ -1,0 +1,7 @@
+[package]
+name = "tokio-hello"
+version = "0.1.0"
+authors = ["Kenneth Powers <ken@kenpowers.net>"]
+
+[dependencies]
+tokio = "0.1.8"
