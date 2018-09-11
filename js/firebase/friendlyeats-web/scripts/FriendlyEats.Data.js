@@ -16,37 +16,81 @@
 'use strict';
 
 FriendlyEats.prototype.addRestaurant = function(data) {
-  /*
-    TODO: Implement adding a document
-  */
+  const collection = firebase
+    .firestore()
+    .collection('restaurants');
+  return collection.add(data);
 };
 
 FriendlyEats.prototype.getAllRestaurants = function(render) {
-  /*
-    TODO: Retrieve list of restaurants
-  */
+  const query = firebase
+    .firestore()
+    .collection('restaurants')
+    .orderBy('avgRating', 'desc')
+    .limit(50);
+  this.getDocumentsInQuery(query, render);
 };
 
 FriendlyEats.prototype.getDocumentsInQuery = function(query, render) {
-  /*
-    TODO: Render all documents in the provided query
-  */
+  query.onSnapshot((snapshot) => {
+    if (!snapshot.size) return;
+    snapshot.docChanges().forEach((change) => {
+      if (change.type === 'added') {
+        render(change.doc);
+      }
+    });
+  });
 };
 
 FriendlyEats.prototype.getRestaurant = function(id) {
-  /*
-    TODO: Retrieve a single restaurant
-  */
+  return firebase
+    .firestore()
+    .collection('restaurants')
+    .doc(id)
+    .get();
 };
 
 FriendlyEats.prototype.getFilteredRestaurants = function(filters, render) {
-  /*
-    TODO: Retrieve filtered list of restaurants
-  */
+  let query = firebase.firestore().collection('restaurants');
+
+  if (filters.category !== 'Any') {
+    query = query.where('category', '==', filters.category);
+  }
+
+  if (filters.city !== 'City') {
+    query = query.where('city', '==', filters.city);
+  }
+
+  if (filters.price !== 'Any') {
+    query = query.where('price', '==', filters.price.length);
+  }
+
+  if (filters.sort === 'Rating') {
+    query = query.sortBy('avgRating', 'desc');
+  } else if (filters.sort === 'Reviews') {
+    query = query.sortBy('numRatings', 'desc');
+  }
+
+  this.getDocumentsInQuery(query, render);
 };
 
-FriendlyEats.prototype.addRating = function(restaurantID, rating) {
-  /*
-    TODO: Retrieve add a rating to a restaurant
-  */
+FriendlyEats.prototype.addRating = async function (restaurantID, rating) {
+  const collection = firebase.firestore().collection('restaurants');
+  const res = collection.doc(restaurantID);
+  await res.collection('ratings').add(rating);
+  return firebase.firestore().runTransaction(async (tx) => {
+    // Note: When a transaction fails on the server, the callback is also
+    // re-executed repeatedly. Never place logic that modifies app state inside
+    // the transaction callback.
+    const doc = await tx.get(res);
+    const data = doc.data();
+    // var newAverage = data.numRatings
+    //   ? ((data.numRatings * data.avgRating + rating.rating) / (data.numRatings + 1))
+    //   : rating.rating;
+    const newAverage = (data.numRatings * data.avgRating + rating.rating) / (data.numRatings + 1)
+    return tx.update(res, {
+      numRatings: data.numRatings + 1,
+      avgRating: newAverage,
+    });
+  });
 };
