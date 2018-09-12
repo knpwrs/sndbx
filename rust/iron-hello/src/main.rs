@@ -18,4 +18,5 @@ fn main() {
         let out = json::encode(&response).unwrap();
         Ok(Response::with((content_type, status::Ok, out)))
     }).http("localhost:3000").unwrap();
+    // or: 0.0.0.0:3000
 }
