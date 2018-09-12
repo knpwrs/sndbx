@@ -1,0 +1,8 @@
+[package]
+name = "iron-hello"
+version = "0.1.0"
+authors = ["Kenneth Powers <ken@kenpowers.net>"]
+
+[dependencies]
+iron = "0.6.0"
+rustc-serialize = "0.3.24"
