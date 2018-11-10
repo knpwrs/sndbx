@@ -1,0 +1,67 @@
+html, body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  display: grid;
+  grid-gap: 15px;
+  grid-auto-rows: 200px;
+  margin-bottom: 15px;
+}
+
+.example-1 {
+  /* Create as many 200px columns fit with 15px gaps */
+  grid-template-columns: repeat(auto-fit, 200px);
+}
+
+.example-2 {
+  /* Grow each column from a minimum of 200px to a maximum of 1fr */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.example-3 {
+  /* Same as above but also add in 150px columns. */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr) 150px);
+}
+
+.example-4 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  /* Fill in any gaps mid-grid */
+  grid-auto-flow: dense;
+}
+/* Vary the placement of grid items */
+.example-4 .item:nth-of-type(3n) {
+  grid-column: span 2;
+}
+.example-4 .item:nth-of-type(5n) {
+  grid-row: span 2;
+}
+
+.item {
+  background: lightblue;
+  color: white;
+  font-weight: bolder;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gallery {
+  display: grid;
+  grid-gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-auto-rows: 200px;
+  grid-auto-flow: row;
+}
+.tall {
+  grid-row: span 2;
+}
+.wide {
+  grid-column: span 2;
+}
+.gallery .img {
+  background-size: cover;
+}
