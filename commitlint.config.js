@@ -1,4 +1,5 @@
 const sndbxs = [
+  'css',
   'js',
   'rust',
 ];
