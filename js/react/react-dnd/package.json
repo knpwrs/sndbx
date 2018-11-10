@@ -1,5 +1,6 @@
 {
   "name": "react-dnd-example",
+  "private": true,
   "scripts": {
     "start": "parcel src/index.html"
   },
